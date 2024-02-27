@@ -15,6 +15,7 @@ services:
     - prometheusdata:/prometheus
     depends_on:
     - cadvisor
+    - node_exporter
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
