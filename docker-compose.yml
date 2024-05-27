@@ -6,7 +6,7 @@ services:
     container_name: prometheus
     ports:
     - 9090:9090
-    restart: unless-stopped
+    restart: always
     command:
     - --config.file=/etc/prometheus/prometheus.yml
     - --web.config.file=/etc/prometheus/web.yml
@@ -22,7 +22,7 @@ services:
     container_name: cadvisor
     expose:
       - 8080
-    restart: unless-stopped
+    restart: always
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
@@ -35,7 +35,7 @@ services:
     image: rebel028/docker_exporter
     #image: prom/container-exporter 
     container_name: docker_exporter
-    restart: unless-stopped
+    restart: always
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     expose:
@@ -52,7 +52,7 @@ services:
       - '--path.rootfs=/host'
     network_mode: host
     pid: host
-    restart: unless-stopped
+    restart: always
     volumes:
       - '/:/host:ro,rslave'
 
