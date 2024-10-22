@@ -6,7 +6,7 @@ services:
     container_name: prometheus
     ports:
     - 9090:9090
-    restart: unless-stopped
+    restart: always
     command:
     - --config.file=/etc/prometheus/prometheus.yml
     - --web.config.file=/etc/prometheus/web.yml
@@ -15,14 +15,14 @@ services:
     - prometheusdata:/prometheus
     depends_on:
     - cadvisor
-    - node_exporter
+    - node-exporter
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     expose:
       - 8080
-    restart: unless-stopped
+    restart: always
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
@@ -35,7 +35,7 @@ services:
     image: rebel028/docker_exporter
     #image: prom/container-exporter 
     container_name: docker_exporter
-    restart: unless-stopped
+    restart: always
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     expose:
@@ -45,16 +45,29 @@ services:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
   
-  node_exporter:
+  node-exporter:
     image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
+    container_name: node-exporter
     command:
       - '--path.rootfs=/host'
-    network_mode: host
+    #network_mode: host
     pid: host
-    restart: unless-stopped
+    restart: always
+    expose:
+      - 9100
     volumes:
       - '/:/host:ro,rslave'
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.81.0
+    container_name: otel-collector
+    command: [ "--config=/etc/collector.yaml" ]
+    # ports:
+    #   - "4317:4317" # Connection from app to grafana tempo
+    volumes:
+      - ./otel/otel-collector-config.yml:/etc/collector.yaml
+    # networks:
+    #   - mynetwork
 
 volumes:
   prometheusdata:
