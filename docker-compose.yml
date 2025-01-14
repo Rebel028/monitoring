@@ -61,6 +61,7 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.81.0
     container_name: otel-collector
+    restart: always
     command: [ "--config=/etc/collector.yaml" ]
     # ports:
     #   - "4317:4317" # Connection from app to grafana tempo
