@@ -69,6 +69,16 @@ services:
       - ./otel/otel-collector-config.yml:/etc/collector.yaml
     # networks:
     #   - mynetwork
+  
+  postgres-exporter:
+    container_name: postgres-exporter
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+        - DATA_SOURCE_URI=db:5432/postgres?sslmode=disable
+        - DATA_SOURCE_USER=postgres_exporter
+        - DATA_SOURCE_PASS=
+    # networks:
+    #   - postgres_net
 
 volumes:
   prometheusdata:
