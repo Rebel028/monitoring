@@ -8,9 +8,9 @@ exporters:
   logging:
     loglevel: info
   otlp:
-    endpoint: grpc.example.com:443
+    endpoint: ${OTEL_GRPC_ENDPOINT}
     headers:
-      authorization: Basic <Base64>
+      authorization: ${OTEL_AUTH_HEADER}
     tls:
       insecure: false
 
